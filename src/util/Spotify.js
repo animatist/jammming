@@ -1,3 +1,5 @@
+import React from 'react';
+
 const clientId = '36b4aa0b9b2344b5b9765d94e1694ff7';
 const redirectUri = 'http://localhost:3000/';
 let accessToken;
@@ -5,12 +7,12 @@ let expiresIn;
 const Spotify = {
   getAccessToken(){
     if (accessToken){
-      return accessToken;
+      return  new Promise(resolve => resolve(accessToken));
     }
-    const urlAccesToken = window.location.href.match(/access_token=([^&]*)/);
+    const urlAccessToken = window.location.href.match(/access_token=([^&]*)/);
     const urlExpiresIn = window.location.href.match(/expires_in=([^&]*)/);
-    if(urlAccesToken && urlExpiresIn){
-      accessToken = urlAccesToken[1];
+    if(urlAccessToken && urlExpiresIn){
+      accessToken = urlAccessToken[1];
       expiresIn = urlExpiresIn[1];
       window.setTimeout(() => accessToken = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
@@ -24,22 +26,22 @@ const Spotify = {
       headers: {Authorization: `Bearer ${accessToken}`}
     }).then(response => response.json()
   ).then(jsonResponse => {
-    if (!jsonResponse.tracks) return [];
-    return jsonResponse.tracks.items.map(track => {
-      return {
+    if (!jsonResponse.tracks){return [];}
+    return jsonResponse.tracks.items.map(track => ({
+
         id: track.id,
         name: track.name,
         artist: track.artists[0].name,
         album: track.album.name,
         uri: track.uri
-      }
-    })
+
+    }))
    })
  },
 
  savePlaylist(name, trackUris){
-   if(!name || !trackUris) return;
-   const headers = {Authorization: `Bearer ${accessToken}`};
+   if(!name || !trackUris) {return}
+   else{ const headers = {Authorization: `Bearer ${accessToken}`};
    let userId;
    let playlistId;
 
@@ -69,6 +71,7 @@ const Spotify = {
           });
          })
     })
+  }
   }
 }
 
