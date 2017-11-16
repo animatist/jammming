@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Track.css';
 
-class Track extends React.Component{
+class Track extends Component{
   constructor(props){
     super(props);
+
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
-    this.renderAction = this.renderAction.bind(this);
   }
 
   renderAction(){
     if(this.props.isRemoval){
-      return <a className="Track-action" onClick={this.removeTrack}>-</a>;
+      return (
+        <a className="Track-action" onClick={this.removeTrack}>-</a>
+      );
     }else{
-      return <a className="Track-action" onClick={this.addTrack}>+</a>;
+      return (
+        <a className="Track-action" onClick={this.addTrack}>+</a>
+      );
     }
   }
 
@@ -34,7 +38,7 @@ class Track extends React.Component{
         </div>
         {this.renderAction()}
       </div>
-    )
+    );
   }
 }
 
