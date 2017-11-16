@@ -1,19 +1,18 @@
-import React from 'react';
-
 const clientId = '36b4aa0b9b2344b5b9765d94e1694ff7';
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = 'http://localhost:3000';
+
 let accessToken;
-let expiresIn;
+
 const Spotify = {
   getAccessToken(){
     if (accessToken){
-      return  new Promise(resolve => resolve(accessToken));
+      return accessToken;
     }
     const urlAccessToken = window.location.href.match(/access_token=([^&]*)/);
     const urlExpiresIn = window.location.href.match(/expires_in=([^&]*)/);
     if(urlAccessToken && urlExpiresIn){
       accessToken = urlAccessToken[1];
-      expiresIn = urlExpiresIn[1];
+      const expiresIn = urlExpiresIn[1];
       window.setTimeout(() => accessToken = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
     } else {
